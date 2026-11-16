@@ -15,6 +15,7 @@ from itertools import combinations
 from pathlib import Path
 
 import networkx as nx
+from bridge_analysis import EVENT_LAYERS, compare_layers, describe_layer, review_analysis, robustness
 
 
 REPOS = [
@@ -65,9 +66,9 @@ def make_view(
     for repo, _ in REPOS:
         core.add_node(f"repo:{repo}")
     multi = {actor: repos for actor, repos in per_actor.items() if len(repos) >= 2}
-    for actor, repos in multi.items():
+    for actor, repos in sorted(multi.items()):
         core.add_node(f"actor:{actor}")
-        for repo in repos:
+        for repo in sorted(repos):
             core.add_edge(f"actor:{actor}", f"repo:{repo}")
     between = nx.betweenness_centrality(core, normalized=True)
 
@@ -78,7 +79,7 @@ def make_view(
             edges.append({"source": first, "target": second, "shared": len(shared)})
     edges.sort(key=lambda edge: (-edge["shared"], edge["source"], edge["target"]))
 
-    selected = sorted(
+    legacy_order = sorted(
         multi,
         key=lambda actor: (
             -between.get(f"actor:{actor}", 0),
@@ -86,7 +87,10 @@ def make_view(
             -sum(multi[actor].values()),
             actor.lower(),
         ),
-    )[:40]
+    )
+    bridge_layer = describe_layer(core, multi, len(REPOS), between) if key in EVENT_LAYERS else None
+    top = bridge_layer["top"] if bridge_layer else []
+    selected = list(dict.fromkeys([*top, *legacy_order]))[:40]
     sample_actors = [
         {
             "id": actor,
@@ -106,6 +110,8 @@ def make_view(
         "sampleActors": sample_actors,
         "maxBetweenness": round(max((between.get(f"actor:{a}", 0) for a in multi), default=0), 5),
     }
+    if bridge_layer is not None:
+        result["bridgeLayer"] = bridge_layer
     if key == "all":
         # Compare centralities on the same connected, undirected, binary
         # bipartite core. Single-repository actors are excluded consistently.
@@ -142,6 +148,7 @@ def make_view(
             "scores": scores,
             "rankings": rankings,
         }
+        result["robustness"] = robustness(core, multi, between)
     return result
 
 
@@ -150,6 +157,7 @@ def main() -> None:
     parser.add_argument("--input", type=Path, default=Path("data/raw-events.jsonl"))
     parser.add_argument("--output", type=Path, default=Path("docs/data.json"))
     parser.add_argument("--centrality-csv", type=Path, default=Path("docs/repro/centrality-scores.csv"))
+    parser.add_argument("--bridge-csv", type=Path, default=Path("docs/repro/bridge-scores.csv"))
     args = parser.parse_args()
 
     raw_events = [json.loads(line) for line in args.input.read_text(encoding="utf-8").splitlines()]
@@ -162,6 +170,7 @@ def main() -> None:
     review_pairs = Counter()
     review_actors = set()
     review_authors = set()
+    review_excluded = Counter()
 
     for event in raw_events:
         actor = event["actor_login"]
@@ -170,6 +179,8 @@ def main() -> None:
         layer = TYPE_LAYER[kind]
         if repo not in REPO_INDEX:
             raise ValueError(f"Unexpected repository: {repo}")
+        if not "2025-01-01T00:00:00Z" <= event["event_time_utc"] < "2025-02-01T00:00:00Z":
+            raise ValueError(f"Event outside study period: {event['event_time_utc']}")
         if not actor or is_bot(actor):
             bot_rows += 1
             continue
@@ -188,12 +199,21 @@ def main() -> None:
         # the PR creator, so directed person-to-person edges use that type.
         if kind == "PullRequestReviewEvent":
             author = event["creator_user_login"]
-            if author and author != actor and not is_bot(author):
+            if not author:
+                review_excluded["missingAuthor"] += 1
+            elif actor.casefold() == author.casefold():
+                review_excluded["selfReview"] += 1
+            elif is_bot(author):
+                review_excluded["botAuthor"] += 1
+            else:
                 review_pairs[(actor, author)] += 1
                 review_actors.add(actor)
                 review_authors.add(author)
 
     views = {key: make_view(key, actors_repos, actor_events) for key in LAYERS}
+    layer_comparison = compare_layers({key: views[key]["bridgeLayer"] for key in EVENT_LAYERS})
+    removal = views["all"].pop("robustness")
+    review = review_analysis(review_pairs)
     role_sets = {key: set(actors_repos[key]) for key in LAYERS[1:]}
     bridge_sets = {
         key: {actor for actor, repos in actors_repos[key].items() if len(repos) >= 2}
@@ -233,6 +253,8 @@ def main() -> None:
             for name, label in REPOS
         ],
         "views": views,
+        "bridgeComparison": layer_comparison,
+        "robustness": removal,
         "typeCounts": dict(type_counts),
         "overlap": {
             "actorJaccard": {
@@ -260,10 +282,12 @@ def main() -> None:
             "reviewerAuthorPairs": len(review_pairs),
             "reviewers": len(review_actors),
             "authors": len(review_authors),
+            "excluded": {key: review_excluded[key] for key in ("missingAuthor", "selfReview", "botAuthor")},
             "topPairs": [
                 {"reviewer": actor, "author": author, "events": count}
-                for (actor, author), count in review_pairs.most_common(12)
+                for (actor, author), count in sorted(review_pairs.items(), key=lambda row: (-row[1], row[0]))[:12]
             ],
+            "analysis": review,
         },
         "weeks": [
             {
@@ -278,7 +302,7 @@ def main() -> None:
             "node": "GitHub 帳號與儲存庫，建立二模參與網絡",
             "edge": "帳號在指定期間於儲存庫產生至少一筆指定類型事件；圖上使用二元邊，事件數另行顯示",
             "bridge": "於兩個以上選定儲存庫留下事件的帳號；圖示依二模核心（跨庫帳號＋儲存庫）的標準化中介中心度挑選前 40 位",
-            "centrality": "全部事件層的二模核心為無向、無權重、二元圖；以同一張 93 帳號＋10 儲存庫網絡比較 degree、closeness、betweenness、eigenvector。特徵向量分數在帳號類內以最高分縮放為 1。",
+            "centrality": "全部事件層的二模核心為無向、無權重、二元圖；同一張圖比較 degree、closeness、betweenness、eigenvector。特徵向量分數在帳號類內以最高分縮放為 1。Review 的三項指標另在審查互動圖計算。",
             "issues": "IssuesEvent；議題開啟、關閉與重新開啟",
             "discussion": "IssueCommentEvent；包含 issue 與 PR 討論留言，不能全當成 issue 留言",
             "pulls": "PullRequestEvent；PR 開啟、關閉與重新開啟",
@@ -296,13 +320,24 @@ def main() -> None:
         },
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(output, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    args.output.write_text(json.dumps(output, ensure_ascii=False, separators=(",", ":"), allow_nan=False), encoding="utf-8")
     args.centrality_csv.parent.mkdir(parents=True, exist_ok=True)
     with args.centrality_csv.open("w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(("actor_login", "repo_degree", "closeness", "betweenness", "eigenvector_actor_max_1"))
         for actor, scores in sorted(views["all"]["centrality"]["scores"].items()):
             writer.writerow((actor, scores["degree"], scores["closeness"], scores["betweenness"], scores["eigenvector"]))
+    args.bridge_csv.parent.mkdir(parents=True, exist_ok=True)
+    with args.bridge_csv.open("w", encoding="utf-8", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(("network", "actor_login", "degree", "degree_centrality", "betweenness", "constraint"))
+        for network, scores in [
+            *((key, views[key]["bridgeLayer"]["scores"]) for key in EVENT_LAYERS),
+            ("review_interaction", review["scores"]),
+        ]:
+            for actor, row in scores.items():
+                writer.writerow((network, actor, row["degree"], row["degreeCentrality"],
+                                 row["betweenness"], row.get("constraint")))
     print(
         f"Raw rows: {len(raw_events)} | human rows: {output['metadata']['humanRows']} "
         f"| actors: {views['all']['actors']} | cross-repo: {views['all']['multiRepoActors']}"
@@ -310,6 +345,7 @@ def main() -> None:
     print("Role overlap:", output["overlap"])
     print("Saved", args.output)
     print("Saved", args.centrality_csv)
+    print("Saved", args.bridge_csv)
 
 
 if __name__ == "__main__":

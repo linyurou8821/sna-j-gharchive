@@ -306,3 +306,72 @@ h3 { font-size: 1.3rem; }
   .site-footer p { margin: 1.5rem 0; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .button,.repo-chip { transition: none; } }
+
+.question-card a { display: block; margin-top: .55rem; }
+.graph-actor.top-bridge :is(circle,text) { fill: #d5e58d; font-weight: 700; }
+.graph-footnote a { color: #d5e58d; }
+.network-extra { max-width: 1500px; margin: 1.2rem auto 0; padding: 1.2rem clamp(1rem,3vw,2rem); border: 1px solid #39565b; color: #edf5ec; background: #182b30; }
+.network-extra summary,.research-details summary { cursor: pointer; font-weight: 700; }
+.network-extra > p,.network-extra #reviewEgo > p { color: #c7dcd6; }
+.network-extra .research-table { background: #fff; color: #172d2b; }
+.ego-plot { width: min(100%, 650px); margin-block: .65rem; background: #20393c; }
+.ego-plot .research-svg text { fill: #e1f3ee; font-size: 19px; }
+.ego-plot .research-svg .ego-current { fill: #d5e58d; font-weight: 700; }
+.research-stack { max-width: 1500px; margin-inline: auto; display: grid; gap: 1.2rem; }
+.research-block { min-width: 0; border: 1px solid #cddbd3; background: #edf3ed; padding: clamp(1rem, 3vw, 2.5rem); scroll-margin-top: 6rem; }
+.research-block > h3, .supplement-heading h3 { font-size: clamp(1.4rem, 3.2vw, 2.25rem); line-height: 1.2; margin: .5rem 0 .8rem; }
+.research-block h4 { font-size: 1.18rem; margin: 1.4rem 0 .5rem; }
+.research-block p,.network-extra p { line-height: 1.7; }
+.research-answer { border-left: .25rem solid #477a66; background: #e0ece1; padding: .65rem .85rem; }
+.research-table { max-width: 100%; overflow: auto; margin-block: .7rem; background: #fff; border: 1px solid #d3dfd6; color: #172d2b; }
+.research-table table { width: 100%; border-collapse: collapse; font-size: .88rem; line-height: 1.4; }
+.research-table caption { text-align: left; font-weight: 700; padding: .65rem .7rem; background: #dfece4; }
+.research-table th,.research-table td { text-align: left; padding: .43rem .6rem; border-bottom: 1px solid #e1e9e1; }
+.research-table th { white-space: nowrap; }
+.research-table thead { background: #f1f6f2; color: #294942; }
+.research-table td { min-width: 3.2rem; }
+.research-details { margin-block: .85rem; border: 1px solid #ccdcd3; padding: .65rem .75rem; }
+.research-details > .research-table:last-child { max-height: 27rem; }
+.research-details li { margin-block: .45rem; overflow-wrap: anywhere; }
+.research-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .8rem; align-items: start; }
+.research-grid.three { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.research-grid figure { margin: 0; background: #fff; border: 1px solid #d3dfd6; padding: .55rem; }
+.research-grid figcaption { font-weight: 700; padding: .25rem; color: #183c34; }
+.research-grid .research-table { margin-top: 0; }
+.research-details .research-grid { margin-top: .65rem; }
+.research-note { color: #445a51; font-size: .87rem; margin-block: .55rem; }
+.research-svg { display: block; width: 100%; height: auto; }
+.research-svg text { font-size: 16px; fill: #25473e; }
+.chart-grid-line { stroke: #d4e3da; stroke-width: 1; }
+.scatter-dot { fill: #45786f; opacity: .42; }
+.candidate-dot,.legend-dot { fill: #a94b24; background: #a94b24; }
+.legend-dot { display: inline-block; width: .65rem; height: .65rem; border-radius: 50%; }
+.curve { fill: none; }
+.curve.betweenness { stroke: #236653; stroke-width: 5; }
+.curve.degree { stroke: #a94926; stroke-width: 3.4; stroke-dasharray: 9 6; }
+.curve.random { stroke: #2c4f9c; stroke-width: 2; stroke-dasharray: 2 6; }
+.curve-dot.betweenness { fill: #236653; }
+.curve-dot.degree { fill: #a94926; }
+.curve-dot.random { fill: #2c4f9c; }
+.random-band { fill: #b5c7eb; opacity: .7; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: .45rem .9rem; font-size: .88rem; margin-block: .7rem; }
+.chart-legend span::before { content: ''; display: inline-block; width: 1.5rem; margin-right: .35rem; vertical-align: middle; border-bottom: .18rem solid #236653; }
+.chart-legend .degree::before { border-bottom-style: dashed; border-color: #a94926; }
+.chart-legend .random::before { border-bottom-style: dotted; border-color: #2c4f9c; }
+.chart-legend .range::before { border: 0; height: .5rem; background: #b5c7eb; }
+.research-block select,.network-extra select { max-width: 100%; font: inherit; margin: 0 .4rem .55rem 0; padding: .28rem; color: #172d2b; background: #fff; border: 1px solid #68857a; }
+.compare-graphs { max-width: 1050px; }
+.removal-edge { stroke: #63958c; opacity: .26; }
+.removal-actor { fill: #9b582f; }
+.removal-repo { fill: #245c4e; }
+.research-svg:has(.removal-repo) text { font-size: 12px; font-weight: 700; paint-order: stroke; stroke: #fff; stroke-width: 3px; }
+.supplement-heading { max-width: 1500px; margin: 2.4rem auto 1rem; }
+@media (max-width: 1080px) {
+  .research-grid.three { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 660px) {
+  .research-grid,.research-grid.three { grid-template-columns: minmax(0,1fr); }
+  .research-block { scroll-margin-top: 5rem; }
+  .ego-plot { overflow-x: auto; }
+  .ego-plot > svg { min-width: 410px; }
+}

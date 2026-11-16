@@ -15,7 +15,7 @@ CHAPTERS = [
     ("05-questions.md", "questions", "常見疑問"),
     ("06-reproduce.md", "reproduce", "重現與發布"),
 ]
-REPO = "https://github.com/xxoon0987/sna-j-gharchive/blob/main/"
+REPO = "https://github.com/linyurou8821/sna-j-gharchive"
 
 
 def render_chapter(filename: str, anchor: str) -> str:
@@ -26,8 +26,8 @@ def render_chapter(filename: str, anchor: str) -> str:
     for name, target, _ in CHAPTERS:
         rendered = rendered.replace(f'href="{name}"', f'href="#{target}"')
     rendered = rendered.replace('href="../docs/', 'href="./')
-    rendered = rendered.replace('href="../analysis/', f'href="{REPO}analysis/')
-    rendered = rendered.replace('href="../data/', f'href="{REPO}data/')
+    rendered = rendered.replace('href="../analysis/', f'href="{REPO}/blob/main/analysis/')
+    rendered = rendered.replace('href="../data/', f'href="{REPO}/blob/main/data/')
     rendered = rendered.replace('<table>', '<div class="table-scroll" tabindex="0" role="region" aria-label="可橫向捲動的資料表"><table>')
     rendered = rendered.replace('</table>', '</table></div>')
     return f'<section class="chapter" id="{anchor}">{rendered}</section>'
@@ -51,7 +51,7 @@ def main() -> None:
 </head>
 <body>
   <a class="skip" href="#reading">跳至導讀內容</a>
-  <header class="topbar"><a class="brand" href="./index.html">J<span>.</span> 開源協作地圖</a><nav aria-label="網站導覽"><a href="./index.html#network">互動報告 ↗</a><a href="https://github.com/xxoon0987/sna-j-gharchive">GitHub 專案 ↗</a></nav></header>
+  <header class="topbar"><a class="brand" href="./index.html">J<span>.</span> 開源協作地圖</a><nav aria-label="網站導覽"><a href="./index.html#network">互動報告 ↗</a><a href="{REPO}">GitHub 專案 ↗</a></nav></header>
   <main>
     <div class="intro">
       <p class="eyebrow">GROUP J / READING GUIDE</p>

@@ -125,12 +125,20 @@ x 是每個節點的分數，λ 是對應的特徵值；等價地，一個節點
 
 時間切片前三段各 7 天，最後一段 10 天。用 `該段事件列數 ÷ 天數` 算每日平均，才不會只因天數更多就看起來比較活躍。
 
-有向審查分析是另一個補充分析：只取 `PullRequestReviewEvent`，以事件觸發帳號為審查者、該類事件中的 `creator_user_login` 為 PR 作者，建立「審查者 → PR 作者」。排除作者缺漏、作者被辨識為自動化帳號及自己指向自己的情況。沒有用留言事件推斷留言者的對話對象。**四種中心度使用前述帳號—儲存庫無向核心，並非這個有向人際網絡。**
+有向審查互動只取 `PullRequestReviewEvent`，以觸發帳號為審查者、該事件的 `creator_user_login` 為 PR 作者，建立「審查者 → PR 作者」。排除作者缺漏、作者為可辨識的自動化帳號及自我指向。一般留言無法辨識對話對象。RQ2 用審查互動的無向簡化圖；原先四種中心度仍用帳號—儲存庫二模核心。
 
 ## 與課文怎麼對照？
 
 [課程 W02](https://sna-studio-course-tw.cs-lee.chatgpt.site/week/2)的 Davis Southern Club Women 是「女性 × 社交活動」的 0／1 出席矩陣；本組是「帳號 × 儲存庫」的 0／1 事件參與矩陣。兩者資料結構相似，使用的資料集不同。共同出席不等於友誼，正如共同參與專案不等於帳號曾直接合作。
 
-[課程 W06](https://sna-studio-course-tw.cs-lee.chatgpt.site/week/6)列出 degree、closeness、betweenness、eigenvector，對應 Hanneman & Riddle 第 10 章的中心度主題。本組比較同一張圖的四種位置，並公開參數。跨專案與中介位置也可連結「橋接」概念，但本組未計算 Burt constraint 或 effective size，不能宣稱已完成正式的結構洞指標分析。
+[課程 W06](https://sna-studio-course-tw.cs-lee.chatgpt.site/week/6)列出 degree、closeness、betweenness、eigenvector，對應 Hanneman & Riddle 第 10 章的中心度主題。延伸分析依[課程個案](https://sna-studio-course-tw.cs-lee.chatgpt.site/cases#sna-github)比較三層橋接者與核心移除。
+
+## 三個核心分析
+
+1. 各事件層保留十庫與該層跨庫帳號，以標準化中介正分篩選前十名。同分依帳號名稱排序，跨層只比較名單重疊。
+2. 將有向審查關係合為單一無向邊，再在這張帳號圖算 Degree、Betweenness、Burt’s Constraint。Constraint 衡量連線是否集中，或鄰居能否透過彼此連結替代。直接套在無權重二模網絡會退化為 Degree 的倒數，因此不在二模圖使用。
+3. 以全部事件二模核心為基準，只移除帳號。固定排名攻擊與 500 次隨機移除比較 1、3、5、10 個帳號；觀察分量數、最大分量比例、可達配對和剩餘邊，另計固定十庫間的可達率。
+
+完整分母、公式和固定種子見[方法與重現](../docs/repro/method.md)。
 
 [下一篇：結果與限制](04-results.md)

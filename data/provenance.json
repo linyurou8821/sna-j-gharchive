@@ -37,6 +37,23 @@
     3184,
     4820
   ],
+  "bridgeAnalysisRevision": {
+    "retrievedOnUTC": "2026-11-16",
+    "firstRefetchSHA256WithLF": "ba926cc9004132a109ede2698bc675af4d8563cc7727364d974462e52b75d711",
+    "publishedAnalysisInputSHA256": "5b8ade481bbfad855fb9e37459efee7d851108574ede8a5ff43b2e75c3f4a6dc",
+    "verificationRefetchSHA256": "5055a82d220fafc4439a2114cc9224998d46aca65d93a9cd18c75637a6f17633",
+    "lineSortedSHA256OfBothVerifiedRefetches": "1b1e6825f16e6528a93227085da330a803f08126dbab7976e212efbdbb75c10f",
+    "analysisGeneratedAt": "2026-11-16T07:35:40+00:00",
+    "software": {
+      "python": "3.10.6",
+      "networkx": "3.2.1",
+      "Markdown": "3.4.1"
+    },
+    "output": {
+      "path": "docs/data.json",
+      "sha256": "3d8b498b78c97f6a1301e644b993fe057ec8f7b5aa59ff9535cdfc686da5e121"
+    }
+  },
   "auditLimitations": [
     "No independent retrieval timestamp or COUNT(*) response was preserved.",
     "No original event ID or actor ID was selected.",

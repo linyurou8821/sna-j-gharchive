@@ -15,8 +15,10 @@
 - `analysis/events.sql`：十個儲存庫 ID、五種事件與時間邊界。
 - `analysis/fetch_events.py`：分四段查詢鏡像，儲存九個分析欄位。
 - `analysis/analyze.py`：清理、建立集合與二模網絡、輸出統計及中心度。
+- `analysis/bridge_analysis.py`：分層橋接、審查 Constraint、節點移除。
 - `docs/data.json`：網站使用的固定分析結果。
 - `docs/repro/centrality-scores.csv`：93 個跨專案帳號的四項中心度。
+- `docs/repro/bridge-scores.csv`：各事件二模核心與審查帳號圖的指標（無效或不適用的 Constraint 留白）。
 - `data/provenance.json`：原始擷取檔的 SHA-256、列數與版本資訊。
 - `guide/` 與 `analysis/build_guide.py`：導讀原稿與靜態網頁產生程式。
 
@@ -24,15 +26,15 @@
 
 ## 安裝與重新取得
 
-以下命令在專案根目錄執行。原分析環境是 Python 3.12.4、NetworkX 3.2.1；導讀產生使用 Markdown 3.4.1。
+以下命令在專案根目錄執行。原分析環境是 Python 3.12.4，本次重算使用 Python 3.10；均使用 NetworkX 3.2.1，導讀產生使用 Markdown 3.4.1。
 
 ```bash
-git clone https://github.com/xxoon0987/sna-j-gharchive.git
+git clone https://github.com/linyurou8821/sna-j-gharchive.git
 cd sna-j-gharchive
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-python analysis/fetch_events.py --output data/raw-events-new.jsonl
+python analysis/fetch_events.py
 ```
 
 Windows 的啟用環境命令改用 `.venv\Scripts\activate`。公共鏡像服務可能限流、停用或改變資料表；程式失敗時應先確認服務和欄位，不能把不完整回應當成完整資料。程式使用公開示範帳號 `demo`，不是個人的 GitHub 憑證。
@@ -40,14 +42,15 @@ Windows 的啟用環境命令改用 `.venv\Scripts\activate`。公共鏡像服�
 ## 重新計算
 
 ```bash
-python analysis/analyze.py --input data/raw-events-new.jsonl --output docs/data.json --centrality-csv docs/repro/centrality-scores.csv
+python analysis/analyze.py
 python analysis/build_guide.py
+python -m unittest discover -s analysis -v
 python -m http.server 4173 --directory docs
 ```
 
 再用瀏覽器開啟 `http://127.0.0.1:4173/`。不要直接雙擊 `index.html`，因為瀏覽器可能阻擋從本機檔案讀取 JSON。
 
-**更新資料後，必須同步更新 README、六份導讀和講稿的數字及版本紀錄。** 這些文件是人工解釋，不會隨 JSON 自動改寫。`build_guide.py` 只將六份 Markdown 轉為網頁，不會重新分析資料。`docs/repro/` 的可下載程式也應與 `analysis/` 同步。
+**更新資料後，須同步核對 README、導讀與資料版本紀錄。** 這些文件是人工解釋，不會隨 JSON 自動改寫。`build_guide.py` 只將六份 Markdown 轉為網頁。`docs/repro/` 的可下載程式應與 `analysis/` 同步。瀏覽器回歸檢查可用 Node.js 及 `playwright-core`：將 `BROWSER_EXECUTABLE` 設為本機 Edge 或 Chromium 執行檔路徑，執行 `node analysis/browser_check.cjs`。它在本機檢查五種切換模式、鍵盤選取、全螢幕、圖表與資料對照、下載和手機寬度。
 
 ## 本次擷取的核對紀錄
 
@@ -64,6 +67,8 @@ python -m http.server 4173 --directory docs
 原取得程式為避開公開示範服務的單次 10,000 列限制而分段；每段實際列數均低於該限制。但**低於限制本身，不等於已證明完整**：原始擷取沒有額外保存每段 `COUNT(*)` 比對結果、原始事件 ID 或 HTTP 回應中繼資料；也沒有逐時 GH Archive 原檔的逐筆對照。這些是資料稽核仍可補強的部分。
 
 原始取得時間沒有獨立記錄；分析輸出的產生時間為 `2026-10-22T09:05:02+00:00`。這是程式產出時間，不能當成下載時間。研究事件本身發生於 2025 年 1 月。
+
+本次用同一份 SQL 重新擷取，四段列數相同，首輪擷取採 LF 換行後的原始檔 SHA-256 與原快照相同。後兩次擷取的列順序不同，排序後的 SHA-256 相同，逐列內容和重複筆數一致。見[資料版本紀錄](../data/provenance.json)。
 
 ## 更嚴謹地擴充研究
 
@@ -82,7 +87,7 @@ python -m http.server 4173 --directory docs
 1. GitHub 儲存庫 → **Settings → Pages**。
 2. Source 選 **Deploy from a branch**。
 3. Branch 選 **main**，資料夾選 **/docs**，儲存。
-4. 等待 GitHub Pages 部署完成，開啟 [公開網站](https://xxoon0987.github.io/sna-j-gharchive/)。
+4. 等待 GitHub Pages 部署完成，開啟 [公開網站](https://linyurou8821.github.io/sna-j-gharchive/)。
 
 之後把更新推送到 `main` 的 `docs/`，GitHub Pages 就會重新發布。網站使用相對路徑，因此可在 `/sna-j-gharchive/` 這個專案網址下正常讀取樣式與資料。`.nojekyll` 讓這份現成的 HTML／CSS／JavaScript 以靜態檔發布。
 

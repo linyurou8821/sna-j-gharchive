@@ -10,6 +10,7 @@ import argparse
 import base64
 import json
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 from urllib.request import Request, urlopen
 
 
@@ -20,6 +21,7 @@ WINDOWS = [
     ("2025-01-15 00:00:00", "2025-01-22 00:00:00"),
     ("2025-01-22 00:00:00", "2025-02-01 00:00:00"),
 ]
+RESPONSE_LIMIT = 10_000
 
 
 def main() -> None:
@@ -30,24 +32,36 @@ def main() -> None:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     credential = base64.b64encode(b"demo:").decode("ascii")
     total = 0
-    with args.output.open("w", encoding="utf-8") as out:
-        for start, end in WINDOWS:
-            sql = template.replace("{{START}}", start).replace("{{END}}", end)
-            request = Request(
-                ENDPOINT,
-                data=sql.encode("utf-8"),
-                headers={"Authorization": f"Basic {credential}"},
-                method="POST",
-            )
-            with urlopen(request, timeout=120) as response:
-                rows = response.read().decode("utf-8").splitlines()
-            for line in rows:
-                event = json.loads(line)
-                if not (start[:10] <= event["event_time_utc"][:10] < end[:10]):
-                    raise ValueError(f"Event outside queried window: {event['event_time_utc']}")
-                out.write(json.dumps(event, ensure_ascii=False) + "\n")
-            total += len(rows)
-            print(f"{start[:10]} to {end[:10]}: {len(rows)} rows", flush=True)
+    temp_path = None
+    try:
+        with NamedTemporaryFile(
+            dir=args.output.parent, prefix=args.output.name, suffix=".tmp", delete=False,
+            mode="w", encoding="utf-8", newline="\n",
+        ) as out:
+            temp_path = Path(out.name)
+            for start, end in WINDOWS:
+                sql = template.replace("{{START}}", start).replace("{{END}}", end)
+                request = Request(
+                    ENDPOINT,
+                    data=sql.encode("utf-8"),
+                    headers={"Authorization": f"Basic {credential}"},
+                    method="POST",
+                )
+                with urlopen(request, timeout=120) as response:
+                    rows = response.read().decode("utf-8").splitlines()
+                if not 0 < len(rows) < RESPONSE_LIMIT:
+                    raise ValueError(f"Unexpected row count ({len(rows)}) for {start} to {end}; check the mirror")
+                for line in rows:
+                    event = json.loads(line)
+                    if not (start[:10] <= event["event_time_utc"][:10] < end[:10]):
+                        raise ValueError(f"Event outside queried window: {event['event_time_utc']}")
+                    out.write(json.dumps(event, ensure_ascii=False) + "\n")
+                total += len(rows)
+                print(f"{start[:10]} to {end[:10]}: {len(rows)} rows", flush=True)
+        temp_path.replace(args.output)
+    finally:
+        if temp_path is not None:
+            temp_path.unlink(missing_ok=True)
     print(f"Saved {total} public event rows to {args.output}")
 
 

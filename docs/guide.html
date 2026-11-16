@@ -10,7 +10,7 @@
 </head>
 <body>
   <a class="skip" href="#reading">跳至導讀內容</a>
-  <header class="topbar"><a class="brand" href="./index.html">J<span>.</span> 開源協作地圖</a><nav aria-label="網站導覽"><a href="./index.html#network">互動報告 ↗</a><a href="https://github.com/xxoon0987/sna-j-gharchive">GitHub 專案 ↗</a></nav></header>
+  <header class="topbar"><a class="brand" href="./index.html">J<span>.</span> 開源協作地圖</a><nav aria-label="網站導覽"><a href="./index.html#network">互動報告 ↗</a><a href="https://github.com/linyurou8821/sna-j-gharchive">GitHub 專案 ↗</a></nav></header>
   <main>
     <div class="intro">
       <p class="eyebrow">GROUP J / READING GUIDE</p>
@@ -28,7 +28,7 @@
       <aside class="contents"><p class="eyebrow">閱讀路線</p><nav aria-label="章節目錄"><a href="#overview"><span>01</span>先看懂報告</a><a href="#data"><span>02</span>資料來源與內容</a><a href="#methods"><span>03</span>網絡與數學</a><a href="#results"><span>04</span>結果與限制</a><a href="#questions"><span>05</span>常見疑問</a><a href="#reproduce"><span>06</span>重現與發布</a></nav><p>第一次閱讀：從第 1 章開始。<br>準備答問：直接看第 5 章。<br>查計算參數：看第 3 章。</p><a class="download" href="./repro/centrality-scores.csv" download>下載完整中心度 CSV ↓</a></aside>
       <article id="reading"><section class="chapter" id="overview"><h2>01｜先看懂這個報告</h2>
 <h3>我們到底在研究什麼？</h3>
-<p>開源軟體的工作可能由不同帳號完成：有人發現問題、有人回答、有人的修改被送出審查。這份報告把公開活動紀錄整理成關係圖，觀察「哪些帳號參與哪些專案」，以及不同活動的參與帳號有多少重疊。</p>
+<p>開源軟體的工作可能由不同帳號完成：有人發現問題、有人回答、有人的修改被送出審查。這份報告把公開活動整理成關係圖，觀察誰在不同事件中跨庫、誰在審查互動中具有橋接位置，以及移除跨庫帳號後網絡是否分裂。</p>
 <p>例如甲帳號只在專案 X 留言，乙帳號同時在 X 和 Y 有活動。兩者都有參與，但乙在這個觀察範圍內具有跨專案位置。這個位置值得研究，卻不能單靠它斷言乙比較厲害，或真的促成兩個團隊合作。</p>
 <h3>三個研究問題</h3>
 <div class="table-scroll" tabindex="0" role="region" aria-label="可橫向捲動的資料表"><table>
@@ -41,19 +41,19 @@
 </thead>
 <tbody>
 <tr>
-<td>Issue、PR、Review 是不是同一批帳號？</td>
-<td>比較帳號集合，計算 Jaccard</td>
-<td>兩種活動的參與帳號重疊程度</td>
+<td>RQ1：不同事件關係中的橋接者是否相同？</td>
+<td>比較 Issue、PR、Review 各二模核心的高中介名單</td>
+<td>哪些跨庫橋接帳號重疊</td>
 </tr>
 <tr>
-<td>哪些帳號跨越專案？</td>
-<td>帳號連到的不同儲存庫數與四種中心度</td>
-<td>帳號在界定網絡內的位置</td>
+<td>RQ2：不同中心度與結構洞指標是否會辨識出不同的關鍵帳號？</td>
+<td>在審查互動圖比較 Degree、Betweenness、Constraint</td>
+<td>看重直接連線、最短路徑或連結冗餘時，名單如何改變</td>
 </tr>
 <tr>
-<td>換一種活動，網絡會怎麼變？</td>
-<td>固定時間與十個專案，切換事件類型</td>
-<td>關係定義改變後，帳號數與連線如何改變</td>
+<td>RQ3：移除橋接節點後，網絡連通性是否比隨機移除下降得更明顯？</td>
+<td>在同一張二模核心，以固定排名和隨機順序移除帳號</td>
+<td>在指定步數下是否出現分量增加或可達率下降</td>
 </tr>
 </tbody>
 </table></div>
@@ -145,7 +145,7 @@
 <p>公開 repo 可以讓外部帳號提議修改，但不是任何人都能直接覆寫主專案。外部貢獻者常在自己的分支或 fork 準備修改，再送 PR；有權限的維護者決定是否合併。PR 也可能修改文件或設定，不限於程式碼。</p>
 <h3>可以用這句話介紹報告</h3>
 <blockquote>
-<p>我們用 2025 年 1 月十個 Hugging Face 專案的公開 GitHub 事件，研究不同活動的帳號是否重疊，以及哪些帳號跨越專案。我們把事件轉成帳號與儲存庫的網絡，用 Jaccard 和四種中心度描述參與模式。</p>
+<p>我們用 2025 年 1 月十個 Hugging Face 專案的公開 GitHub 事件，比較三類活動的跨庫橋接者、審查看到的人際結構，以及移除重要帳號後二模核心是否分裂。</p>
 </blockquote>
 <h3>我們做了哪些分析工作？</h3>
 <ol>
@@ -154,6 +154,7 @@
 <li>排除可辨識的自動化帳號事件。</li>
 <li>把事件整理成帳號集合與 0／1 參與矩陣。</li>
 <li>計算重疊、跨專案參與、四種中心度與每日平均。</li>
+<li>比較三層橋接榜、審查互動的 Constraint，並進行節點移除模擬。</li>
 <li>把結果做成能切換事件類型的網站，附上程式和解讀限制。</li>
 </ol>
 <p>這是「既有資料的再分析」。資料的收集來源與本組的分析貢獻應分別交代。</p>
@@ -599,12 +600,44 @@ A x = λ x
 <p>所以，沒有出現在示例圖上不代表沒有參與。切換 Issue／PR／Review 後，門檻套用的是該類事件，示例帳號也可能改變。下方四張中心度比較卡始終使用「全部事件」核心，不跟著篩選器重新計算；分層核心可能不連通，不能直接把不同層的分數當成同一尺度比較。</p>
 <h3>每日平均與有向審查網絡</h3>
 <p>時間切片前三段各 7 天，最後一段 10 天。用 <code>該段事件列數 ÷ 天數</code> 算每日平均，才不會只因天數更多就看起來比較活躍。</p>
-<p>有向審查分析是另一個補充分析：只取 <code>PullRequestReviewEvent</code>，以事件觸發帳號為審查者、該類事件中的 <code>creator_user_login</code> 為 PR 作者，建立「審查者 → PR 作者」。排除作者缺漏、作者被辨識為自動化帳號及自己指向自己的情況。沒有用留言事件推斷留言者的對話對象。<strong>四種中心度使用前述帳號—儲存庫無向核心，並非這個有向人際網絡。</strong></p>
+<p>有向審查互動只取 <code>PullRequestReviewEvent</code>，以觸發帳號為審查者、該事件的 <code>creator_user_login</code> 為 PR 作者，建立「審查者 → PR 作者」。排除作者缺漏、作者為可辨識的自動化帳號及自我指向。一般留言無法辨識對話對象。RQ2 用審查互動的無向簡化圖；原先四種中心度仍用帳號—儲存庫二模核心。</p>
 <h3>與課文怎麼對照？</h3>
 <p><a href="https://sna-studio-course-tw.cs-lee.chatgpt.site/week/2">課程 W02</a>的 Davis Southern Club Women 是「女性 × 社交活動」的 0／1 出席矩陣；本組是「帳號 × 儲存庫」的 0／1 事件參與矩陣。兩者資料結構相似，使用的資料集不同。共同出席不等於友誼，正如共同參與專案不等於帳號曾直接合作。</p>
-<p><a href="https://sna-studio-course-tw.cs-lee.chatgpt.site/week/6">課程 W06</a>列出 degree、closeness、betweenness、eigenvector，對應 Hanneman &amp; Riddle 第 10 章的中心度主題。本組比較同一張圖的四種位置，並公開參數。跨專案與中介位置也可連結「橋接」概念，但本組未計算 Burt constraint 或 effective size，不能宣稱已完成正式的結構洞指標分析。</p>
+<p><a href="https://sna-studio-course-tw.cs-lee.chatgpt.site/week/6">課程 W06</a>列出 degree、closeness、betweenness、eigenvector，對應 Hanneman &amp; Riddle 第 10 章的中心度主題。延伸分析依<a href="https://sna-studio-course-tw.cs-lee.chatgpt.site/cases#sna-github">課程個案</a>比較三層橋接者與核心移除。</p>
+<h3>三個核心分析</h3>
+<ol>
+<li>各事件層保留十庫與該層跨庫帳號，以標準化中介正分篩選前十名。同分依帳號名稱排序，跨層只比較名單重疊。</li>
+<li>將有向審查關係合為單一無向邊，再在這張帳號圖算 Degree、Betweenness、Burt’s Constraint。Constraint 衡量連線是否集中，或鄰居能否透過彼此連結替代。直接套在無權重二模網絡會退化為 Degree 的倒數，因此不在二模圖使用。</li>
+<li>以全部事件二模核心為基準，只移除帳號。固定排名攻擊與 500 次隨機移除比較 1、3、5、10 個帳號；觀察分量數、最大分量比例、可達配對和剩餘邊，另計固定十庫間的可達率。</li>
+</ol>
+<p>完整分母、公式和固定種子見<a href="./repro/method.md">方法與重現</a>。</p>
 <p><a href="#results">下一篇：結果與限制</a></p></section>
 <section class="chapter" id="results"><h2>04｜結果與限制</h2>
+<h3>三項研究問題</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可橫向捲動的資料表"><table>
+<thead>
+<tr>
+<th>研究問題</th>
+<th>實際結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RQ1：橋接者是否相同？</td>
+<td>三層各取 10 位，沒有同時出現在三榜的帳號。Issue／PR、Issue／Review 各重疊 1 位（Jaccard 0.053），PR／Review 交集 4 位（0.250）。Issue、PR、Review 各有 8、5、5 位獨有。</td>
+</tr>
+<tr>
+<td>RQ2：指標是否找出同一批帳號？</td>
+<td>同一張 375 帳號、618 無向邊的審查圖中，Degree 首名 ArthurZucker，Betweenness 首名 aymeric-roucher；兩榜共有 8 位。高中介與低 Constraint 共有 9 位，顯示兩項排名相近，仍有差別。</td>
+</tr>
+<tr>
+<td>RQ3：定向移除會造成較大的分裂嗎？</td>
+<td>移除 1、3、5、10 位均維持 1 個分量、最大分量和可達配對均 100%。兩種排名前十共有 7 位。移除 10 位時，中介優先少 41 邊，Degree 優先少 44 邊，隨機平均少 24.66 邊（20–33）。邊少不等於連通性下降。</td>
+</tr>
+</tbody>
+</table></div>
+<p>這些結果僅適用於十個庫、這個月份及指定事件。沒有足夠欄位重建完整的 Issue／PR 人際互動；節點移除實驗也未測量維護者退出會造成的現實影響。</p>
+<p>以下是原有的補充分析，保留全體角色重疊與跨庫參與。</p>
 <h3>事件多、帳號多、連線多是不同的量</h3>
 <div class="table-scroll" tabindex="0" role="region" aria-label="可橫向捲動的資料表"><table>
 <thead>
@@ -886,29 +919,32 @@ A x = λ x
 <li><code>analysis/events.sql</code>：十個儲存庫 ID、五種事件與時間邊界。</li>
 <li><code>analysis/fetch_events.py</code>：分四段查詢鏡像，儲存九個分析欄位。</li>
 <li><code>analysis/analyze.py</code>：清理、建立集合與二模網絡、輸出統計及中心度。</li>
+<li><code>analysis/bridge_analysis.py</code>：分層橋接、審查 Constraint、節點移除。</li>
 <li><code>docs/data.json</code>：網站使用的固定分析結果。</li>
 <li><code>docs/repro/centrality-scores.csv</code>：93 個跨專案帳號的四項中心度。</li>
+<li><code>docs/repro/bridge-scores.csv</code>：各事件二模核心與審查帳號圖的指標（無效或不適用的 Constraint 留白）。</li>
 <li><code>data/provenance.json</code>：原始擷取檔的 SHA-256、列數與版本資訊。</li>
 <li><code>guide/</code> 與 <code>analysis/build_guide.py</code>：導讀原稿與靜態網頁產生程式。</li>
 </ul>
 <p>原始 <code>data/raw-events.jsonl</code> <strong>未附在公開儲存庫</strong>。只有這個儲存庫時，可以檢查分析程式與已發布結果，也可以重新查詢；若要針對原始擷取檔完全重算，仍須另取得該檔，並比對 SHA-256。雜湊能識別檔案版本，不能證明來源完整或內容正確。</p>
 <h3>安裝與重新取得</h3>
-<p>以下命令在專案根目錄執行。原分析環境是 Python 3.12.4、NetworkX 3.2.1；導讀產生使用 Markdown 3.4.1。</p>
-<pre><code class="language-bash">git clone https://github.com/xxoon0987/sna-j-gharchive.git
+<p>以下命令在專案根目錄執行。原分析環境是 Python 3.12.4，本次重算使用 Python 3.10；均使用 NetworkX 3.2.1，導讀產生使用 Markdown 3.4.1。</p>
+<pre><code class="language-bash">git clone https://github.com/linyurou8821/sna-j-gharchive.git
 cd sna-j-gharchive
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-python analysis/fetch_events.py --output data/raw-events-new.jsonl
+python analysis/fetch_events.py
 </code></pre>
 <p>Windows 的啟用環境命令改用 <code>.venv\Scripts\activate</code>。公共鏡像服務可能限流、停用或改變資料表；程式失敗時應先確認服務和欄位，不能把不完整回應當成完整資料。程式使用公開示範帳號 <code>demo</code>，不是個人的 GitHub 憑證。</p>
 <h3>重新計算</h3>
-<pre><code class="language-bash">python analysis/analyze.py --input data/raw-events-new.jsonl --output docs/data.json --centrality-csv docs/repro/centrality-scores.csv
+<pre><code class="language-bash">python analysis/analyze.py
 python analysis/build_guide.py
+python -m unittest discover -s analysis -v
 python -m http.server 4173 --directory docs
 </code></pre>
 <p>再用瀏覽器開啟 <code>http://127.0.0.1:4173/</code>。不要直接雙擊 <code>index.html</code>，因為瀏覽器可能阻擋從本機檔案讀取 JSON。</p>
-<p><strong>更新資料後，必須同步更新 README、六份導讀和講稿的數字及版本紀錄。</strong> 這些文件是人工解釋，不會隨 JSON 自動改寫。<code>build_guide.py</code> 只將六份 Markdown 轉為網頁，不會重新分析資料。<code>docs/repro/</code> 的可下載程式也應與 <code>analysis/</code> 同步。</p>
+<p><strong>更新資料後，須同步核對 README、導讀與資料版本紀錄。</strong> 這些文件是人工解釋，不會隨 JSON 自動改寫。<code>build_guide.py</code> 只將六份 Markdown 轉為網頁。<code>docs/repro/</code> 的可下載程式應與 <code>analysis/</code> 同步。瀏覽器回歸檢查可用 Node.js 及 <code>playwright-core</code>：將 <code>BROWSER_EXECUTABLE</code> 設為本機 Edge 或 Chromium 執行檔路徑，執行 <code>node analysis/browser_check.cjs</code>。它在本機檢查五種切換模式、鍵盤選取、全螢幕、圖表與資料對照、下載和手機寬度。</p>
 <h3>本次擷取的核對紀錄</h3>
 <p>時間是 UTC；每段含開始、不含結束。</p>
 <div class="table-scroll" tabindex="0" role="region" aria-label="可橫向捲動的資料表"><table>
@@ -949,6 +985,7 @@ python -m http.server 4173 --directory docs
 </table></div>
 <p>原取得程式為避開公開示範服務的單次 10,000 列限制而分段；每段實際列數均低於該限制。但<strong>低於限制本身，不等於已證明完整</strong>：原始擷取沒有額外保存每段 <code>COUNT(*)</code> 比對結果、原始事件 ID 或 HTTP 回應中繼資料；也沒有逐時 GH Archive 原檔的逐筆對照。這些是資料稽核仍可補強的部分。</p>
 <p>原始取得時間沒有獨立記錄；分析輸出的產生時間為 <code>2026-10-22T09:05:02+00:00</code>。這是程式產出時間，不能當成下載時間。研究事件本身發生於 2025 年 1 月。</p>
+<p>本次用同一份 SQL 重新擷取，四段列數相同，首輪擷取採 LF 換行後的原始檔 SHA-256 與原快照相同。後兩次擷取的列順序不同，排序後的 SHA-256 相同，逐列內容和重複筆數一致。見<a href="https://github.com/linyurou8821/sna-j-gharchive/blob/main/data/provenance.json">資料版本紀錄</a>。</p>
 <h3>更嚴謹地擴充研究</h3>
 <ol>
 <li>同時保存查詢條件、取得時間、HTTP 狀態與檔案雜湊。</li>
@@ -964,7 +1001,7 @@ python -m http.server 4173 --directory docs
 <li>GitHub 儲存庫 → <strong>Settings → Pages</strong>。</li>
 <li>Source 選 <strong>Deploy from a branch</strong>。</li>
 <li>Branch 選 <strong>main</strong>，資料夾選 <strong>/docs</strong>，儲存。</li>
-<li>等待 GitHub Pages 部署完成，開啟 <a href="https://xxoon0987.github.io/sna-j-gharchive/">公開網站</a>。</li>
+<li>等待 GitHub Pages 部署完成，開啟 <a href="https://linyurou8821.github.io/sna-j-gharchive/">公開網站</a>。</li>
 </ol>
 <p>之後把更新推送到 <code>main</code> 的 <code>docs/</code>，GitHub Pages 就會重新發布。網站使用相對路徑，因此可在 <code>/sna-j-gharchive/</code> 這個專案網址下正常讀取樣式與資料。<code>.nojekyll</code> 讓這份現成的 HTML／CSS／JavaScript 以靜態檔發布。</p>
 <p>設定依據：<a href="https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site">GitHub Pages 發布來源文件</a>。</p></section></article>

@@ -27,6 +27,8 @@ function svg(tag, attributes = {}, content = null) {
 function renderSummary() {
   document.getElementById('statRepos').textContent = DATA.metadata.repoCount;
   document.getElementById('statRows').textContent = number.format(DATA.metadata.rawRows);
+  document.getElementById('scopeRows').textContent = number.format(DATA.metadata.rawRows);
+  document.getElementById('scopeExcluded').textContent = number.format(DATA.metadata.excludedBotRows);
   document.getElementById('statActors').textContent = number.format(DATA.views.all.actors);
   document.getElementById('statBridges').textContent = number.format(DATA.views.all.multiRepoActors);
   document.getElementById('crossRoleCount').textContent = DATA.overlap.crossRoleBridgeActors;
@@ -124,6 +126,7 @@ function renderGraph(view) {
   graph.replaceChildren();
   const repos = DATA.repositories;
   const people = view.sampleActors;
+  const top = view.bridgeLayer?.top ?? [];
   const repoY = Object.fromEntries(repos.map((repo, i) => [repo.id, 74 + i * 59]));
   const actorY = Object.fromEntries(people.map((actor, i) => [actor.id, people.length === 1 ? 335 : 48 + i * 595 / (people.length - 1)]));
 
@@ -163,11 +166,12 @@ function renderGraph(view) {
   const actorNodes = svg('g');
   people.forEach(actor => {
     const y = actorY[actor.id];
-    const group = svg('g', { class: 'graph-actor', role: 'button', tabindex: '0', 'aria-label': `${actor.id}，參與 ${actor.repos.length} 個專案` });
+    const rank = top.indexOf(actor.id) + 1;
+    const group = svg('g', { class: rank ? 'graph-actor top-bridge' : 'graph-actor', role: 'button', tabindex: '0', 'aria-label': `${actor.id}，參與 ${actor.repos.length} 個專案${rank ? `，橋接排名第 ${rank} 名` : ''}` });
     group.dataset.type = 'actor';
     group.dataset.id = actor.id;
     group.append(svg('circle', { cx: 853, cy: y, r: 5.5 + Math.min(4, actor.repos.length * .4) }));
-    group.append(svg('text', { x: 870, y: y + 4 }, actor.id));
+    group.append(svg('text', { x: 870, y: y + 4 }, rank ? `#${rank} ${actor.id}` : actor.id));
     group.append(svg('title', {}, `${actor.id} · ${actor.repos.length} repos · ${actor.events} events`));
     addKeyboardActivation(group, () => choose('actor', actor.id));
     actorNodes.append(group);
@@ -216,6 +220,9 @@ function renderExplorer() {
   document.getElementById('viewEvents').textContent = number.format(view.events);
   document.getElementById('viewActors').textContent = number.format(view.actors);
   document.getElementById('viewBridgeCount').textContent = number.format(view.multiRepoActors);
+  document.getElementById('graphNote').innerHTML = view.bridgeLayer
+    ? `亮綠色編號為此事件的 ${view.bridgeLayer.top.length} 位上榜橋接帳號。圖上最多 40 位跨庫帳號；上方統計含此層所有保留帳號。 <a href="#rq1">比較三層榜單 ↓</a>`
+    : '圖上最多 40 位跨庫帳號，依所選事件二模核心的中介中心度挑選；上方統計含此層所有保留帳號。';
   if (selected?.type === 'actor' && !view.sampleActors.some(actor => actor.id === selected.id)) selected = null;
   renderGraph(view);
   renderDetail();
@@ -231,9 +238,13 @@ async function init() {
     renderCentrality();
     renderWeeks();
     renderExplorer();
+    renderResearch(DATA);
   } catch (error) {
     document.getElementById('networkGraph').setAttribute('aria-label', '研究資料載入失敗');
     document.getElementById('detailPanel').innerHTML = `<span class="detail-kicker">DATA UNAVAILABLE</span><h3 class="detail-title">資料暫時無法載入</h3><p class="detail-small">請確認網站是透過 HTTP 伺服器開啟，並重新整理頁面。</p>`;
+    for (const id of ['bridgeResults', 'reviewResults', 'removalResults', 'reviewEgo']) {
+      document.getElementById(id).textContent = '分析資料無法顯示。請透過 HTTP 開啟報告並重新整理。';
+    }
     console.error('Failed to load research data:', error);
   }
 }

@@ -1,10 +1,10 @@
 # 第 J 組 SNA 個案｜重現分析
 
-> 完整的白話解釋、欄位表與逐步算式，請閱讀[六章導讀](../guide.html)。程式與講稿見 [GitHub 專案](https://github.com/xxoon0987/sna-j-gharchive)。
+> 完整的白話解釋、欄位表與逐步算式，請閱讀[六章導讀](../guide.html)。程式與講稿見 [GitHub 專案](https://github.com/linyurou8821/sna-j-gharchive)。
 
 ## 研究問題
 
-在 Hugging Face 的十個 AI／資料科學開源專案中，參與 issue、PR 與 review 的帳號是否為同一批人？哪些帳號在選定期間跨越多個儲存庫？
+依 [SNA Studio 的開源協作案例](https://sna-studio-course-tw.cs-lee.chatgpt.site/cases#sna-github)，我們研究三件事：各事件層的跨庫橋接者是否相同；三種指標是否識別同一批審查帳號；移除高中心度帳號是否使二模核心比隨機移除更容易分裂。
 
 ## 資料範圍
 
@@ -50,6 +50,26 @@ Eigenvector 在這張二模圖的意思是「帳號連向結構上也較中心�
 
 有向審查網絡只使用 `PullRequestReviewEvent`，以「審查者 → PR 作者」建立關係，並排除同一帳號對自己的關係。ClickHouse 扁平表中，留言事件的 `creator_user_login` 對應留言作者；因此沒有把留言事件推成「留言者 → 原作者」的人際邊。
 
+### RQ1：三層橋接名單
+
+Issue、PR、Review 各有一張二模核心，固定保留十庫（含孤立庫），帳號需在該層連到至少兩庫。Degree 中心度＝相鄰儲存庫數 ÷ 十個可能的儲存庫。Betweenness 使用 `networkx.betweenness_centrality(normalized=True)`，端點不計入；無向圖按全圖的其他節點配對標準化，不可達的配對不貢獻分數。先取小數第 12 位，按高至低排序，同分先比不分大小寫的帳號，再比原字串。正分帳號才入前十名，不足時不補零分。兩榜交集除以聯集，兩榜皆空時 Jaccard 不定；「獨有」指另兩榜皆無此帳號。
+
+### RQ2：審查互動與 Constraint
+
+[鏡像的匯入程式](https://github.com/ClickHouse/sql.clickhouse.com/blob/main/load_scripts/github_events/ingest.sh)按順序取 `payload.comment.user.login`、`payload.issue.user.login` 或 `payload.pull_request.user.login`。[GitHub 事件定義](https://docs.github.com/en/rest/using-the-rest-api/github-event-types)顯示，送出 Review 時可用 `pull_request`；PR 或 Issue 事件的狀態動作不能一律推成人際互動，留言者也不一定就是原議題的作者。現有擷取不建構 Issue／PR 的人際圖。清理後，從 `PullRequestReviewEvent` 排除缺作者 0 筆、自我審查 882 筆及作者為可辨識自動化帳號 1 筆，留下 2,058 筆事件、675 條不同有向邊。
+
+三種指標均改在「任一方向出現審查就連一條邊」的 375 帳號、618 邊簡單無向圖計算。Degree 中心度是鄰居數 ÷（圖中帳號數 − 1）；中介使用與 RQ1 相同的算法，但圖的意義不同，不比較兩張圖的絕對分數。將 `pᵥw` 定義為帳號 v 投在鄰居 w 的連結比例，Burt’s Constraint 可寫成 `C(v) = Σw (pᵥw + Σq pᵥq p_qw)²`；外層對直接鄰居 w 加總，內層對其他鄰居 q 加總。用 `networkx.constraint(weight=None)`。若無有效鄰居，分數以空值呈現；目前互動圖由有效邊的端點構成，因此沒有孤立帳號。Constraint 可大於 1，不能當成機率。
+
+不使用二模 Constraint，因帳號的鄰居是儲存庫，庫與庫不能相連，間接項消失；等權的直接連線會使分數等於 `1 / Degree`。不以「共同參與同一儲存庫」投影出假定的人際邊。比較高 Degree、高 Betweenness、低 Constraint 的各前十名；後兩榜的交集是候選，排序同分規則同 RQ1。完整資料見[橋接與審查分數 CSV](bridge-scores.csv)。
+
+### RQ3：定向與隨機移除
+
+- 基準固定為全部事件二模核心。只移除帳號及相連邊；所有 10 個儲存庫（包括孤立庫）都保留。
+- 比較 0、1、3、5、10 個帳號。定向依原圖 Betweenness 或 Degree 固定排序，不因移除重算；同分規則同 RQ1。
+- 用 Python `random.Random(202501)` 隨機產生 500 條不放回順序，每條順序使用對應長度的前綴。公布平均及樣本最小、最大值；不是信賴區間。
+- 若各分量大小為 `sᵢ`，剩餘節點數為 `N`：最大分量比例是 `max(sᵢ) / N`；可達配對比例是 `Σ C(sᵢ,2) / C(N,2)`。兩者皆包含帳號與庫，分母在同一移除量下相同。另計算庫與庫配對可達率，以 10 庫的 45 個無序配對為固定分母。
+- 同時記錄分量數、剩餘邊、基準邊數減剩餘邊。邊隨節點移除自然減少；網絡是否分裂看連通性指標。這是結構模擬，不代表維護者離開後的實際專案表現。
+
 ## 自動化帳號與限制
 
 排除登入名稱以 `[bot]` 結尾的帳號，以及由 [Hugging Face doc-builder 專案文件](https://github.com/huggingface/doc-builder)可辨識的 `HuggingFaceDocBuilderDev`。其他自動化帳號可能留在資料中。
@@ -62,9 +82,9 @@ Eigenvector 在這張二模圖的意思是「帳號連向結構上也較中心�
 
 ## 重現步驟
 
-1. 安裝 Python 3.11 以上與 `networkx`。
+1. 使用 Python 3.10 以上，執行 `python -m pip install -r requirements.txt`。
 2. 在專案根目錄執行 `python3 analysis/fetch_events.py --output data/raw-events.jsonl`。程式將一個月分成四段查詢，避免 ClickHouse 公開示範服務單次回傳 10,000 列的限制。
-3. 執行 `python3 analysis/analyze.py --input data/raw-events.jsonl --output docs/data.json --centrality-csv docs/repro/centrality-scores.csv`，產生網站資料與中心度分數表。需使用已安裝 `networkx` 的 Python 環境。
-4. 透過 HTTP 伺服器開啟 `docs/`（例如 `python3 -m http.server 4173 --directory docs`），網站會讀取產生的 `data.json`。
+3. 執行 `python analysis/analyze.py`，產生 `docs/data.json` 及兩份分數 CSV。接著用 `python analysis/build_guide.py` 更新導讀，並用 `python -m unittest discover -s analysis -v` 驗證資料。
+4. 透過 HTTP 伺服器開啟 `docs/`（例如 `python -m http.server 4173 --directory docs`），網站會讀取產生的 `data.json`；可在「研究發現」查看三項結果。
 
 原始查詢只取分析需要的事件欄位，未擷取 issue、PR 或留言本文。原始事件列不包含在網站中；網站使用彙總結果、示例節點，以及 93 個跨專案帳號的中心度。這些結果包含公開帳號名稱，並非匿名資料。原始快照未另做 COUNT 比對或依事件 ID 去重，也未逐筆比對 GH Archive 原檔；重現的可檢查程度與限制見完整導讀。
