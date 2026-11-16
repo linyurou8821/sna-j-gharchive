@@ -70,6 +70,12 @@ async function main() {
     assert.equal(await page.locator('.graph-edge.active').count(), 0);
     assert.match(await page.locator('#detailPanel').innerText(), /選一個節點/);
 
+    await page.goto(url + '#review-interaction');
+    await page.waitForFunction(() => {
+      const summary = document.querySelector('#review-interaction > summary').getBoundingClientRect();
+      const header = document.querySelector('.site-header').getBoundingClientRect();
+      return summary.top >= header.bottom && summary.bottom < innerHeight;
+    });
     await page.locator('#review-interaction > summary').click();
     const account = Object.keys(data.reviewNetwork.analysis.scores).sort().at(-1);
     await page.locator('#reviewAccount').selectOption(account);

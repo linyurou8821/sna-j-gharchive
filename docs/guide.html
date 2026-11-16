@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="從 Issue、PR、Review 到 Jaccard 與 eigenvector：第 J 組開源協作報告的完整白話導讀，附資料定義、算式、結果與重現步驟。">
+  <meta name="description" content="第 J 組開源協作報告的白話導讀，說明三層橋接榜、審查互動的 Constraint、節點移除與重現步驟。">
   <meta name="theme-color" content="#12352f">
   <title>白話導讀｜開源協作地圖 · 第 J 組</title>
   <link rel="stylesheet" href="./guide.css">
@@ -16,7 +16,7 @@
       <p class="eyebrow">GROUP J / READING GUIDE</p>
       <h1>先看懂，<br><em>再讀懂數字。</em></h1>
       <p class="lede">從「這份報告在做什麼」開始，一步一步理解公開活動如何變成網絡、指標與結論。</p>
-      <p class="intro-note">研究：2025 年 1 月 · 10 個 Hugging Face 專案<br>整理：2026 年 10 月 · 固定資料，不即時追蹤</p>
+      <p class="intro-note">研究：2025 年 1 月 · 10 個 Hugging Face 專案<br>更新：2026 年 11 月 · 固定資料，不即時追蹤</p>
       <div class="number-path" aria-label="帳號篩選條件">
         <div><strong>1,379</strong><span>研究資料裡的不同帳號</span></div><b aria-hidden="true">→</b>
         <div><strong>93</strong><span>其中，參與至少兩個專案</span></div><b aria-hidden="true">→</b>
@@ -595,7 +595,7 @@ A x = λ x
 <ol>
 <li>整體統計涵蓋所選類型的所有保留帳號。</li>
 <li>各事件層先找出跨至少兩個專案的帳號，建立該層核心。</li>
-<li>為了可讀性，圖上最多畫 40 個帳號，按該層未四捨五入的中介中心度挑選。同分再比較專案數、事件數與帳號名稱。</li>
+<li>Issue、PR、Review 的互動圖先顯示 RQ1 的上榜帳號，以亮色編號標示。其餘位置依該層的中介中心度、專案數、事件數與帳號名稱補至最多 40 個帳號。「全部」與「討論」也使用這套示例排序。</li>
 </ol>
 <p>所以，沒有出現在示例圖上不代表沒有參與。切換 Issue／PR／Review 後，門檻套用的是該類事件，示例帳號也可能改變。下方四張中心度比較卡始終使用「全部事件」核心，不跟著篩選器重新計算；分層核心可能不連通，不能直接把不同層的分數當成同一尺度比較。</p>
 <h3>每日平均與有向審查網絡</h3>
@@ -814,7 +814,7 @@ A x = λ x
 <p><a href="#questions">下一篇：常見疑問</a></p></section>
 <section class="chapter" id="questions"><h2>05｜常見疑問與報告答問</h2>
 <h3>1. 我們到底做了什麼？</h3>
-<p>我們取得指定範圍的公開活動資料，重新整理與分析。研究重點是「哪些帳號參與哪些專案，以及不同活動的參與帳號有多少重疊」。網站讓大家可以切換活動類型、查看關係，再理解背後的數字。</p>
+<p>我們分析十個 Hugging Face 儲存庫在 2025 年 1 月的公開活動。網站先比較 Issue、PR、Review 的跨庫橋接者，再用三種指標比較審查互動位置，最後測試移除節點後的連通性。</p>
 <h3>2. Issue 是真的處理問題？PR 是只提出想法？Review 是點開看過？</h3>
 <p>這三種理解都需要調整：</p>
 <div class="table-scroll" tabindex="0" role="region" aria-label="可橫向捲動的資料表"><table>
@@ -867,7 +867,7 @@ A x = λ x
 <p>例如 A 在兩個專案都只留言，算進 93，但不算進 59。B 在一個專案留言、另一個專案送 PR，兩邊都算。C 只在同一專案留言和送 PR，雖然跨活動類型，仍不算進 93 或 59。這些是虛構例子。</p>
 <h3>7. Jaccard 是「連擊」或連線數嗎？</h3>
 <p>Jaccard 是<strong>兩個集合重疊的比例</strong>。像比較兩堂課的選課名單：同時選兩堂的人數，除以至少選一堂的不同人數。</p>
-<p>本研究 Issue 與 PR 的 Jaccard 是 <code>125 ÷ 801 ≈ 0.156</code>。它不是連線數，也不記錄動作順序，因此不能說是「先提 Issue、接著送 PR 的連擊」。同一帳號的兩種活動甚至可以發生在不同專案、不同議題。</p>
+<p>RQ1 比較<strong>橋接者前十名</strong>。Issue 和 PR 的榜單交集 1 位、聯集 19 位，Jaccard 約為 <strong>0.053</strong>。補充成果比較<strong>所有參與帳號</strong>，同一組事件的交集 125 位、聯集 801 位，Jaccard 約為 <strong>0.156</strong>。兩個結果都只描述集合重疊，活動的先後順序不在這個算式裡。</p>
 <h3>8. 排除 813 筆機器人事件就是資料清理嗎？</h3>
 <p>是。先訂規則，再移除不符合研究分析對象的紀錄。813 是事件列數，不是帳號數。規則是帳號名稱以 <code>[bot]</code> 結尾，或名稱為 <code>HuggingFaceDocBuilderDev</code>；不保證抓到全部自動化活動。</p>
 <h3>9. 沒下載全部逐時壓縮檔，會比較不精確嗎？</h3>
@@ -880,9 +880,13 @@ A x = λ x
 <p>課堂 W02 的 Davis 個案是「女性 × 社交活動」：某人參加某活動記 1。本研究是「帳號 × 儲存庫」：某帳號在某專案有指定事件記 1。兩者都是雙模資料，有兩種不同類型的節點。資料結構相似，研究對象與關係意義不同。</p>
 <h3>12. 其他人需要我的 GPT 或電腦才能看嗎？</h3>
 <p>公開 GitHub Pages 網站由 GitHub 提供。讀者用瀏覽器開啟網站網址即可，不需要登入 ChatGPT，也不需要你的電腦開機。<code>127.0.0.1</code> 則是每個人自己電腦的本機網址，不適合拿來分享。</p>
+<h3>13. 為什麼 Constraint 在審查互動圖上計算？</h3>
+<p>二模圖中的帳號只連到儲存庫，這些儲存庫彼此沒有邊。在無權重的設定下，Constraint 會等於 Degree 的倒數。審查事件可以辨識審查者與 PR 作者，讓我們建立帳號與帳號之間的關係。RQ2 將方向和重複事件簡化為一條無向邊，再比較 Degree、Betweenness 和 Constraint。</p>
+<h3>14. 移除前十名，為什麼連通性還是 100%？</h3>
+<p>這表示剩餘節點間仍有路徑。移除 10 位時，中介優先少 41 條邊，Degree 優先少 44 條，隨機平均少 24.66 條。所有策略在測試的 1、3、5、10 位都維持一個分量。百分比以剩餘節點計算，實驗也沒有測量路徑是否變長或實際工作是否變慢。</p>
 <h3>可以記住的報告說法</h3>
 <blockquote>
-<p>我們分析十個 Hugging Face 專案在 2025 年 1 月的公開事件，用「帳號參與專案」建立雙模網絡。不同活動的帳號部分重疊，1,379 個帳號中有 93 個跨專案，其中 59 個又跨兩類活動。中心度幫助我們描述網絡位置，但不代表個人能力或貢獻價值。</p>
+<p>在研究期間，Issue、PR、Review 的跨庫橋接榜沒有三榜共通的帳號。審查互動圖上的三種指標找出部分共同帳號，也有不同名次。定向移除雖然減少較多連線，在十個專案、指定移除量的模擬中，剩餘網絡仍然連通。</p>
 </blockquote>
 <p>術語依據：<a href="https://docs.github.com/en/rest/using-the-rest-api/github-event-types">GitHub 事件定義</a>、<a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests">About pull requests</a>、<a href="https://www.gharchive.org/">GH Archive</a>。研究數字與條件見<a href="#methods">計算方法</a>。</p></section>
 <section class="chapter" id="reproduce"><h2>06｜重現分析、資料版本與發布</h2>

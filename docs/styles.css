@@ -310,7 +310,7 @@ h3 { font-size: 1.3rem; }
 .question-card a { display: block; margin-top: .55rem; }
 .graph-actor.top-bridge :is(circle,text) { fill: #d5e58d; font-weight: 700; }
 .graph-footnote a { color: #d5e58d; }
-.network-extra { max-width: 1500px; margin: 1.2rem auto 0; padding: 1.2rem clamp(1rem,3vw,2rem); border: 1px solid #39565b; color: #edf5ec; background: #182b30; }
+.network-extra { max-width: 1500px; margin: 1.2rem auto 0; padding: 1.2rem clamp(1rem,3vw,2rem); border: 1px solid #39565b; color: #edf5ec; background: #182b30; scroll-margin-top: 6rem; }
 .network-extra summary,.research-details summary { cursor: pointer; font-weight: 700; }
 .network-extra > p,.network-extra #reviewEgo > p { color: #c7dcd6; }
 .network-extra .research-table { background: #fff; color: #172d2b; }

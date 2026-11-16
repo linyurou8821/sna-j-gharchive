@@ -44,7 +44,7 @@ def main() -> None:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="從 Issue、PR、Review 到 Jaccard 與 eigenvector：第 J 組開源協作報告的完整白話導讀，附資料定義、算式、結果與重現步驟。">
+  <meta name="description" content="第 J 組開源協作報告的白話導讀，說明三層橋接榜、審查互動的 Constraint、節點移除與重現步驟。">
   <meta name="theme-color" content="#12352f">
   <title>白話導讀｜開源協作地圖 · 第 J 組</title>
   <link rel="stylesheet" href="./guide.css">
@@ -57,7 +57,7 @@ def main() -> None:
       <p class="eyebrow">GROUP J / READING GUIDE</p>
       <h1>先看懂，<br><em>再讀懂數字。</em></h1>
       <p class="lede">從「這份報告在做什麼」開始，一步一步理解公開活動如何變成網絡、指標與結論。</p>
-      <p class="intro-note">研究：2025 年 1 月 · 10 個 Hugging Face 專案<br>整理：2026 年 10 月 · 固定資料，不即時追蹤</p>
+      <p class="intro-note">研究：2025 年 1 月 · 10 個 Hugging Face 專案<br>更新：2026 年 11 月 · 固定資料，不即時追蹤</p>
       <div class="number-path" aria-label="帳號篩選條件">
         <div><strong>1,379</strong><span>研究資料裡的不同帳號</span></div><b aria-hidden="true">→</b>
         <div><strong>93</strong><span>其中，參與至少兩個專案</span></div><b aria-hidden="true">→</b>

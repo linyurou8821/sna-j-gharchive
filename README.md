@@ -2,7 +2,7 @@
 
 **誰在開源專案裡連接程式碼與社群？** 依 [SNA Studio 課程案例](https://sna-studio-course-tw.cs-lee.chatgpt.site/cases#sna-github)，我們比較十個 Hugging Face 專案的跨庫橋接者、審查互動位置和網絡穩健性。
 
-我們把 2025 年 1 月的公開 GitHub 活動紀錄整理成「帳號與專案的關係」，用網絡圖和數學指標描述參與模式。本研究沒有訓練 AI 模型，也沒有評分誰的程式能力最好。
+我們用 2025 年 1 月的公開 GitHub 事件建立帳號與儲存庫的參與網絡，以及審查者與 PR 作者的互動網絡。
 
 **[開啟互動報告網站](https://linyurou8821.github.io/sna-j-gharchive/)** · **[閱讀完整白話導讀](https://linyurou8821.github.io/sna-j-gharchive/guide.html)** · **[四人 20 分鐘講稿](presentation/FULL_SCRIPT_20MIN.md)**
 
@@ -14,9 +14,10 @@
 
 | 你想了解什麼 | 閱讀位置 |
 | --- | --- |
+| 要上台報告，想確認四人分工和投影操作 | [20 分鐘投影流程與答問](presentation/REPORT_GUIDE.md) |
 | 完全沒有背景，想先知道報告在做什麼 | [01｜先看懂這個報告](guide/01-overview.md) |
 | Issue、PR、Review 是什麼？原始資料長什麼樣？ | [02｜資料來源、欄位與清理](guide/02-data.md) |
-| 連線、93、59、Jaccard 和 eigenvector 怎麼算？ | [03｜從事件到網絡與數學](guide/03-methods.md) |
+| 二模網絡、橋接榜、Constraint 和節點移除怎麼算？ | [03｜從事件到網絡與數學](guide/03-methods.md) |
 | 結果代表什麼？有哪些不能推論的地方？ | [04｜結果與限制](guide/04-results.md) |
 | 想準備老師可能問的問題 | [05｜常見疑問](guide/05-questions.md) |
 | 想重新計算、更新網站或檢查參數 | [06｜重現與發布步驟](guide/06-reproduce.md) |
@@ -82,7 +83,7 @@
 | 資料內容 | [9 個欄位、5 種原始事件、4 個展示分類](guide/02-data.md)，以及時間與專案邊界 |
 | 基本數學運算 | [0／1 矩陣、加總、集合交聯集、Jaccard、每日平均](guide/03-methods.md) |
 | 課文的類似部分 | W02「女性 × 社交活動」對照「帳號 × 儲存庫」；W06 四種中心度 |
-| 用什麼找重要資訊 | Degree、closeness、betweenness、eigenvector 的定義、參數及 [93 個帳號分數](docs/repro/centrality-scores.csv) |
+| 如何比較橋接位置 | 事件層的中介前十名與審查圖的 Degree、Betweenness、Constraint，見[橋接與審查分數](docs/repro/bridge-scores.csv)；補充的四項中心度見[二模核心分數](docs/repro/centrality-scores.csv) |
 | 可檢查的結論 | [分析程式](analysis/analyze.py)、[網站資料](docs/data.json)、[資料版本紀錄](data/provenance.json)、[重現說明](guide/06-reproduce.md) |
 
 ## 本地重現
