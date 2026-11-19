@@ -13,10 +13,10 @@
 
 | 時間 | 組員與畫面 | 操作與講述重點 |
 | --- | --- | --- |
-| 00:00–05:00 | 組員一 · 首頁、資料範圍、互動網絡 | 介紹三個問題、資料範圍與二模網絡。最後選「全部」，指左側儲存庫、右側帳號。 |
-| 05:00–10:00 | 組員二 · 互動網絡、[RQ1](https://linyurou8821.github.io/sna-j-gharchive/#rq1) | 依序切換 Issue、PR、Review，點一位有編號的帳號。前往重疊表，示範交集除以聯集。 |
-| 10:00–15:00 | 組員三 · [審查關係](https://linyurou8821.github.io/sna-j-gharchive/#review-interaction)、[RQ2](https://linyurou8821.github.io/sna-j-gharchive/#rq2) | 展開有向審查關係，再指向散點圖的兩軸、橘點和重疊表。 |
-| 15:00–20:00 | 組員四 · [RQ3](https://linyurou8821.github.io/sna-j-gharchive/#rq3)、方法與限制 | 指比例曲線，展示移除 10 位的中介優先與 Degree 優先，再收束三項結果。 |
+| 00:00–05:00 | 賴尚圻 · 首頁、資料範圍、互動網絡 | 介紹三個問題、資料範圍與二模網絡。最後選「全部」，指左側儲存庫、右側帳號。 |
+| 05:00–10:00 | 曹碩顯 · 互動網絡、[RQ1](https://linyurou8821.github.io/sna-j-gharchive/#rq1) | 依序切換 Issue、PR、Review，點一位有編號的帳號。前往重疊表，示範交集除以聯集。 |
+| 10:00–15:00 | 林雨柔 · [審查關係](https://linyurou8821.github.io/sna-j-gharchive/#review-interaction)、[RQ2](https://linyurou8821.github.io/sna-j-gharchive/#rq2) | 展開有向審查關係，再指向散點圖的兩軸、橘點和重疊表。 |
+| 15:00–20:00 | 粘筑晴 · [RQ3](https://linyurou8821.github.io/sna-j-gharchive/#rq3)、方法與限制 | 指比例曲線，展示移除 10 位的中介優先與 Degree 優先，再收束三項結果。 |
 
 ## 上台前與現場答問
 

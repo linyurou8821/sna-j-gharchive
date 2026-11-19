@@ -8,12 +8,12 @@
 
 | 時間 | 組員 | 主要畫面 |
 | --- | --- | --- |
-| 00:00–05:00 | 組員一 | [首頁、研究問題、資料範圍、互動網絡](https://linyurou8821.github.io/sna-j-gharchive/#top) |
-| 05:00–10:00 | 組員二 | [互動網絡](https://linyurou8821.github.io/sna-j-gharchive/#network)與 [RQ1 三層事件橋接者](https://linyurou8821.github.io/sna-j-gharchive/#rq1) |
-| 10:00–15:00 | 組員三 | [有向審查關係](https://linyurou8821.github.io/sna-j-gharchive/#review-interaction)與 [RQ2 三種指標](https://linyurou8821.github.io/sna-j-gharchive/#rq2) |
-| 15:00–20:00 | 組員四 | [RQ3 移除實驗](https://linyurou8821.github.io/sna-j-gharchive/#rq3)與[方法與限制](https://linyurou8821.github.io/sna-j-gharchive/#method) |
+| 00:00–05:00 | 賴尚圻 | [首頁、研究問題、資料範圍、互動網絡](https://linyurou8821.github.io/sna-j-gharchive/#top) |
+| 05:00–10:00 | 曹碩顯 | [互動網絡](https://linyurou8821.github.io/sna-j-gharchive/#network)與 [RQ1 三層事件橋接者](https://linyurou8821.github.io/sna-j-gharchive/#rq1) |
+| 10:00–15:00 | 林雨柔 | [有向審查關係](https://linyurou8821.github.io/sna-j-gharchive/#review-interaction)與 [RQ2 三種指標](https://linyurou8821.github.io/sna-j-gharchive/#rq2) |
+| 15:00–20:00 | 粘筑晴 | [RQ3 移除實驗](https://linyurou8821.github.io/sna-j-gharchive/#rq3)與[方法與限制](https://linyurou8821.github.io/sna-j-gharchive/#method) |
 
-## 組員一｜00:00–05:00｜研究動機、資料與網絡定義
+## 賴尚圻｜00:00–05:00｜研究動機、資料與網絡定義
 
 [從首頁標題開始。投影停在首頁，讓同學先看到題目。]
 
@@ -39,7 +39,7 @@
 
 畫面上方的 **93 個跨庫帳號**，是指保留的 1,379 個帳號裡，有 93 個至少參與了兩個庫。右側只畫最多 40 個示例帳號，方便大家看線條。同一個庫連到兩個帳號時，我們只知道兩個帳號都在該庫留下了活動。接下來請第二位組員示範切換事件層，看看橋接名單怎麼變。
 
-## 組員二｜05:00–10:00｜RQ1 不同事件層的橋接者
+## 曹碩顯｜05:00–10:00｜RQ1 不同事件層的橋接者
 
 [留在「互動網絡」。依序點 Issue、PR、Review，每切一次先讓畫面停一下。]
 
@@ -67,7 +67,7 @@ PR 和 Review 共有 **四位**，兩份名單的聯集是十六位，所以四�
 
 報告下方也保留原本的「參與角色、共同專案與活動量」。例如原有的 Issue 與 PR 的 **0.156**，分母是所有參與這兩類事件的不同帳號，而這一題的 **0.053** 用的是兩份橋接榜單。老師如果問為什麼兩個數字不一樣，可以先看它們各自在比較哪一群帳號。接下來交給第三位組員，看看審查事件能辨識出怎樣的帳號關係。
 
-## 組員三｜10:00–15:00｜RQ2 審查互動、中心度與 Constraint
+## 林雨柔｜10:00–15:00｜RQ2 審查互動、中心度與 Constraint
 
 [回到「互動網絡」下方，展開「探索審查者 → PR 作者的互動網絡」。保持預設帳號，指向其中一條箭頭。]
 
@@ -93,7 +93,7 @@ PR 和 Review 共有 **四位**，兩份名單的聯集是十六位，所以四�
 
 再看一個榜單有差異的例子。Wauplin 在中介中心度排第八，但沒有進入低 Constraint 的前十名。如果只用低 Constraint 選帳號，這個最短路徑上的位置就不會出現在榜單裡。這就是第二題的答案。中心度和結構洞指標可以互相補充，幫我們描述多種審查位置。接下來請第四位組員帶大家看移除實驗。
 
-## 組員四｜15:00–20:00｜RQ3 節點移除與結論
+## 粘筑晴｜15:00–20:00｜RQ3 節點移除與結論
 
 [前往「移除帳號後，網絡還連得起來嗎？」。先指基準圖的節點和邊數，再指三種策略的圖例。]
 
