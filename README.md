@@ -4,7 +4,7 @@
 
 我們用 2025 年 1 月的公開 GitHub 事件建立帳號與儲存庫的參與網絡，以及審查者與 PR 作者的互動網絡。
 
-**[開啟互動報告網站](https://linyurou8821.github.io/sna-j-gharchive/)** · **[閱讀完整白話導讀](https://linyurou8821.github.io/sna-j-gharchive/guide.html)** · **[四人 20 分鐘講稿](presentation/FULL_SCRIPT_20MIN.md)**
+**[開啟互動報告網站](https://linyurou8821.github.io/sna-j-gharchive/)** · **[閱讀完整白話導讀](https://linyurou8821.github.io/sna-j-gharchive/guide.html)** · **[研究結論](https://linyurou8821.github.io/sna-j-gharchive/#conclusion)**
 
 這個版本延續[第 J 組原始專案](https://github.com/xxoon0987/sna-j-gharchive)。
 
@@ -109,7 +109,7 @@ guide/                六份說明的 Markdown 原稿
 docs/                 GitHub Pages 網站、圖表資料與下載檔
 analysis/             查詢、分析及導讀產生程式
 data/provenance.json  研究範圍、擷取檔雜湊與環境紀錄
-presentation/         四人講稿與報告流程
+presentation/         報告投影流程與答問
 requirements.txt      Python 套件版本
 ```
 

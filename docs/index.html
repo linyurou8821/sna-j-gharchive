@@ -23,6 +23,7 @@
         <a href="#network">互動網絡</a>
         <a href="#findings">研究發現</a>
         <a href="#method">方法與限制</a>
+        <a href="#conclusion">結論</a>
         <a href="./guide.html">白話導讀 ↗</a>
       </nav>
       <button id="fullscreenBtn" class="present-button" type="button" aria-label="切換全螢幕簡報">⛶ <span>簡報模式</span></button>
@@ -251,7 +252,6 @@
           <div class="source-links">
             <a href="./guide.html">六章完整導讀 ↗</a>
             <a href="https://github.com/linyurou8821/sna-j-gharchive" target="_blank" rel="noopener noreferrer">GitHub 專案 ↗</a>
-            <a href="https://github.com/linyurou8821/sna-j-gharchive/blob/main/presentation/FULL_SCRIPT_20MIN.md" target="_blank" rel="noopener noreferrer">四人 20 分鐘講稿 ↗</a>
             <a href="https://www.gharchive.org/" target="_blank" rel="noopener noreferrer">GH Archive ↗</a>
             <a href="https://docs.github.com/en/rest/using-the-rest-api/github-event-types" target="_blank" rel="noopener noreferrer">GitHub 事件定義 ↗</a>
             <a href="./repro/method.md">重現說明 ↓</a>
@@ -263,6 +263,15 @@
           <summary>研究限制與資料品質 <span>展開閱讀 ＋</span></summary>
           <ul id="limitations"></ul>
         </details>
+      </section>
+      <section class="conclusion page-section" id="conclusion" aria-labelledby="conclusionTitle">
+        <div class="conclusion-content">
+          <h2 id="conclusionTitle">三個研究問題的結論</h2>
+          <p><strong>第一，</strong>不同事件類型會找出不同的跨庫橋接帳號，Issue、PR 和 Review 三份前十名榜單沒有共同入榜的帳號。</p>
+          <p><strong>第二，</strong>在審查互動網絡中，不同指標找出的帳號有部分重疊，但仍存在差異，代表不同指標反映的是不同的網絡結構特性。</p>
+          <p><strong>第三，</strong>優先移除高排名帳號雖然會減少更多連線，但在這次測試的範圍內，剩餘網絡仍然保持連通。</p>
+          <p class="conclusion-summary"><strong>綜合來看，開源專案中的橋接位置會受到事件類型與分析指標影響，而移除高排名帳號，也不一定會使整個網絡分裂。</strong></p>
+        </div>
       </section>
     </main>
 

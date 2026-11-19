@@ -373,6 +373,13 @@ h3 { font-size: 1.3rem; }
 .removal-repo { fill: #245c4e; }
 .research-svg:has(.removal-repo) text { font-size: 12px; font-weight: 700; paint-order: stroke; stroke: #fff; stroke-width: 3px; }
 .supplement-heading { max-width: 1500px; margin: 2.4rem auto 1rem; }
+.conclusion { padding-block: clamp(4rem,7vw,7rem); color: #edf5ec; background: var(--ink); }
+.conclusion-content { max-width: 1100px; margin: auto; }
+.conclusion h2 { margin: 0 0 2rem; font-size: clamp(1.8rem,3.5vw,3rem); line-height: 1.3; color: var(--teal); }
+.conclusion p { margin: 1.4rem 0; font-size: clamp(1rem,1.65vw,1.3rem); line-height: 1.9; text-wrap: pretty; }
+.conclusion p > strong:first-child { color: var(--teal); }
+.conclusion .conclusion-summary { margin-top: 2rem; padding-top: 1.7rem; border-top: 1px solid #506963; }
+.conclusion .conclusion-summary > strong { color: #edf5ec; }
 @media (max-width: 1080px) {
   .research-grid.three { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }

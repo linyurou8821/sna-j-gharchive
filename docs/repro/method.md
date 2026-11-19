@@ -1,6 +1,6 @@
 # 第 J 組 SNA 個案｜重現分析
 
-> 完整的白話解釋、欄位表與逐步算式，請閱讀[六章導讀](../guide.html)。程式與講稿見 [GitHub 專案](https://github.com/linyurou8821/sna-j-gharchive)。
+> 完整的白話解釋、欄位表與逐步算式，請閱讀[六章導讀](../guide.html)。分析程式見 [GitHub 專案](https://github.com/linyurou8821/sna-j-gharchive)。
 
 ## 研究問題
 
