@@ -131,6 +131,7 @@ h3 { font-size: 1.3rem; }
 .project-relations h3 { margin: 0 0 1rem; font-size: clamp(1.4rem,2.5vw,2rem); line-height: 1.4; }
 .project-relations h4 { margin: 1rem 0 .5rem; font-size: 1.15rem; }
 .project-relations p { line-height: 1.8; }
+.integration-background { margin-top: 1.5rem; scroll-margin-top: 6rem; }
 
 .network { background: var(--ink); color: #f7f8f2; }
 .network .eyebrow { color: var(--teal); }

@@ -33,6 +33,8 @@
 <h3>三個研究問題</h3>
 <p>題目中的「程式碼」透過 PR 與 Review 活動觀察，「社群」透過 Issue 與討論觀察。同一帳號跨越兩類活動，提供跨角色參與的證據；其中又跨至少兩庫的帳號有 59 個。以 Wauplin 為例，全月有 76 筆 Issue／討論和 176 筆 PR／Review 事件，並參與五個選定專案。</p>
 <p>專案之間也有共同參與的路徑。Transformers 與 Accelerate 有 22 個共同帳號，Transformers 與 TRL 有 20 個。這些數字來自兩庫參與帳號集合的交集。套件的必要依賴則要查官方安裝設定，例如 Transformers v4.48.0 將 Tokenizers 與 Hugging Face Hub 列為必要依賴。網站另列<a href="./index.html#project-relations">技術關係的來源與活動關係表</a>。</p>
+<p>這些技術關係提供了研究跨專案參與的背景。例如，開發者整合 Transformers 與 PEFT 時，可能因相容性問題，到不同儲存庫提出 Issue、提交修改或參與審查，留下「儲存庫—帳號—儲存庫」的參與路徑。</p>
+<p>目前尚未確認特定帳號是否因技術整合而跨庫參與。後續可檢查研究期間的套件依賴、整合文件及對應 Issue、PR 內容，建立專案技術關係圖，再比較技術上有關聯的專案，是否也有較多共同參與帳號。</p>
 <div class="table-scroll" tabindex="0" role="region" aria-label="可橫向捲動的資料表"><table>
 <thead>
 <tr>
@@ -808,6 +810,7 @@ A x = λ x
 <li><strong>沒有逐筆核對鏡像。</strong>原始快照未保存唯一 event ID，沒有完成逐時原檔比對或依 event ID 的去重。不能保證無重複或遺漏。</li>
 <li><strong>中心度依網絡定義而變。</strong>單一專案帳號未進入中心度核心，得到的是跨專案核心的位置。沒有比較多種門檻、月份或權重的敏感度分析。</li>
 <li><strong>結果是描述性的。</strong>沒有證明因果、品質、工作量或個人價值，也沒有統計顯著性的主張。</li>
+<li><strong>尚未檢驗技術依賴與帳號重疊之間的關係。</strong>技術整合可能提供跨庫參與的背景；特定帳號是否因相容性或整合需求而參與多個專案，仍需檢查套件設定、整合文件及對應 Issue、PR 內容。</li>
 </ol>
 <h3>報告可以怎麼收尾？</h3>
 <blockquote>
