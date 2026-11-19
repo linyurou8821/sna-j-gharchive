@@ -26,6 +26,10 @@
 
 ## 用一分鐘理解
 
+題目以 PR／Review 活動觀察程式碼相關參與，以 Issue／討論觀察社群參與。59 個帳號同時參與這兩類活動並跨越至少兩個儲存庫，其中原互動圖裡的 Wauplin 在全月有 76 筆 Issue／討論事件、176 筆 PR／Review 事件，涉及五個選定專案。
+
+專案關係也能從共同帳號觀察。例如 Transformers 與 Accelerate 有 22 個共同參與帳號，Transformers 與 TRL 有 20 個。網站「資料範圍」下方的[程式碼與專案關係](https://linyurou8821.github.io/sna-j-gharchive/#project-relations)呈現這些實際數據，另附官方指定版本的套件依賴示例。現有事件分析沒有測量程式碼相似度、逐筆 Issue 與 PR 對應，或完整的套件依賴網絡。
+
 把十個開源專案想成十個工作小組。有人提出問題，有人回覆，有人送出修改提案，也有人審查修改。GitHub 會留下其中一些公開活動的紀錄。
 
 本組經 ClickHouse 鏡像擷取 GH Archive 2025 年 1 月 UTC 的五種事件。清理時排除缺少觸發帳號、名稱以 `[bot]` 結尾及 `HuggingFaceDocBuilderDev` 的事件。原始資料分四段取得，沒有擷取留言內容。

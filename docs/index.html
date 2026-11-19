@@ -117,6 +117,37 @@
           </div>
         </div>
         <div class="scope-clarifier"><strong>這十個是 Hugging Face 的 GitHub 程式碼儲存庫。</strong>公開專案可由外部帳號提議修改，是否合併由專案維護者決定。查詢不含留言全文；<span id="scopeRows">—</span> 筆回傳事件中排除 <span id="scopeExcluded">—</span> 筆來自可辨識自動化帳號或缺少帳號的事件。</div>
+        <div class="project-relations" id="project-relations">
+          <h3>程式碼與社群，如何透過帳號連起來？</h3>
+          <p>題目中的「程式碼」以 PR 與 Review 的公開活動觀察，「社群」以 Issue 與討論活動觀察。同一帳號在兩類活動都出現，便提供跨角色參與的證據；若它也參與多個儲存庫，便同時具有跨庫位置。符合這兩個條件的帳號共有 <strong id="crossRoleExampleCount">—</strong> 個。</p>
+          <div id="crossRoleExamples"></div>
+          <p class="research-note">上表彙整同一帳號在整個月的事件與參與專案。資料無法逐一對應「某個 Issue 如何成為某份 PR」，也沒有檢查實際修改內容。</p>
+          <div class="research-grid">
+            <div>
+              <h4>專案的程式碼如何相互使用？</h4>
+              <p>套件可以引用其他套件。以下三條必要依賴，來自指定版本的官方安裝設定。</p>
+              <div class="research-table" tabindex="0" role="region" aria-label="官方套件依賴示例">
+                <table>
+                  <caption>專案的技術關係示例</caption>
+                  <thead><tr><th scope="col">套件版本</th><th scope="col">必要依賴</th></tr></thead>
+                  <tbody>
+                    <tr><th scope="row">Transformers v4.48.0</th><td>Tokenizers</td></tr>
+                    <tr><th scope="row">Transformers v4.48.0</th><td>Hugging Face Hub</td></tr>
+                    <tr><th scope="row">Diffusers v0.32.1</th><td>Hugging Face Hub</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="research-note">來源為官方 setup.py 的 install_requires。這些版本用來說明技術脈絡；本研究的中心度與移除實驗使用 GH Archive 活動邊，未將套件依賴加入計算。</p>
+              <p class="research-note"><a href="https://github.com/huggingface/transformers/blob/v4.48.0/setup.py#L396-L406" target="_blank" rel="noopener noreferrer">Transformers 官方依賴設定 ↗</a> · <a href="https://github.com/huggingface/diffusers/blob/v0.32.1/setup.py#L222-L231" target="_blank" rel="noopener noreferrer">Diffusers 官方依賴設定 ↗</a></p>
+            </div>
+            <div>
+              <h4>哪些專案有共同參與帳號？</h4>
+              <p>如果同一個帳號在 A、B 兩庫都留下所選事件，就形成「A 庫—帳號—B 庫」的參與路徑。下表依全月所有保留帳號計算，同一帳號在同一對庫只計一次。</p>
+              <div id="projectOverlap"></div>
+              <p class="research-note">來源為 2025 年 1 月 GH Archive／ClickHouse 所選事件。共同參與描述帳號集合的交集；套件引用、兩庫共同修改同一段程式，以及團隊是否直接協調，都需要另外的證據。</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section class="network page-section" id="network">

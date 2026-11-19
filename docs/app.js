@@ -56,6 +56,32 @@ function renderOverlap() {
   }).join('');
 }
 
+function renderProjectRelationships() {
+  const labels = Object.fromEntries(DATA.repositories.map(repo => [repo.id, repo.label]));
+  const examples = DATA.views.all.sampleActors.filter(actor =>
+    actor.roles.issues + actor.roles.discussion > 0 && actor.roles.pulls + actor.roles.reviews > 0
+  ).slice(0, 3);
+  document.getElementById('crossRoleExampleCount').textContent = DATA.overlap.crossRoleBridgeActors;
+  document.getElementById('crossRoleExamples').innerHTML = researchTable(
+    '原互動圖中的跨角色、跨庫帳號示例',
+    ['帳號', 'Issue／討論事件', 'PR／Review 事件', '參與專案'],
+    examples.map(actor => [
+      escapeHtml(actor.id),
+      actor.roles.issues + actor.roles.discussion,
+      actor.roles.pulls + actor.roles.reviews,
+      actor.repos.map(repo => escapeHtml(labels[repo])).join('、'),
+    ])
+  );
+  document.getElementById('projectOverlap').innerHTML = researchTable(
+    '共同參與帳號最多的五對專案',
+    ['專案配對', '共同帳號數'],
+    DATA.views.all.edges.slice(0, 5).map(edge => [
+      escapeHtml(labels[edge.source]) + ' ↔ ' + escapeHtml(labels[edge.target]),
+      edge.shared,
+    ])
+  );
+}
+
 function renderCentrality() {
   const core = DATA.views.all.centrality;
   document.getElementById('coreActors').textContent = core.coreActors;
@@ -234,6 +260,7 @@ async function init() {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     DATA = await response.json();
     renderSummary();
+    renderProjectRelationships();
     renderOverlap();
     renderCentrality();
     renderWeeks();

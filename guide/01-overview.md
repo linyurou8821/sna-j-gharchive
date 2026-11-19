@@ -8,6 +8,10 @@
 
 ## 三個研究問題
 
+題目中的「程式碼」透過 PR 與 Review 活動觀察，「社群」透過 Issue 與討論觀察。同一帳號跨越兩類活動，提供跨角色參與的證據；其中又跨至少兩庫的帳號有 59 個。以 Wauplin 為例，全月有 76 筆 Issue／討論和 176 筆 PR／Review 事件，並參與五個選定專案。
+
+專案之間也有共同參與的路徑。Transformers 與 Accelerate 有 22 個共同帳號，Transformers 與 TRL 有 20 個。這些數字來自兩庫參與帳號集合的交集。套件的必要依賴則要查官方安裝設定，例如 Transformers v4.48.0 將 Tokenizers 與 Hugging Face Hub 列為必要依賴。網站另列[技術關係的來源與活動關係表](../docs/index.html#project-relations)。
+
 | 問題 | 使用的資料或方法 | 可以回答的事情 |
 | --- | --- | --- |
 | RQ1：不同事件關係中的橋接者是否相同？ | 比較 Issue、PR、Review 各二模核心的高中介名單 | 哪些跨庫橋接帳號重疊 |
