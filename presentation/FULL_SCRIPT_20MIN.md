@@ -8,12 +8,12 @@
 
 | 時間 | 組員 | 主要畫面 |
 | --- | --- | --- |
-| 00:00–05:00 | 賴尚圻 | [首頁、研究問題、資料範圍、互動網絡](https://linyurou8821.github.io/sna-j-gharchive/#top) |
-| 05:00–10:00 | 曹碩顯 | [互動網絡](https://linyurou8821.github.io/sna-j-gharchive/#network)與 [RQ1 三層事件橋接者](https://linyurou8821.github.io/sna-j-gharchive/#rq1) |
+| 00:00–05:00 | 曹碩顯 | [首頁、研究問題、資料範圍、互動網絡](https://linyurou8821.github.io/sna-j-gharchive/#top) |
+| 05:00–10:00 | 賴尚圻 | [互動網絡](https://linyurou8821.github.io/sna-j-gharchive/#network)與 [RQ1 三層事件橋接者](https://linyurou8821.github.io/sna-j-gharchive/#rq1) |
 | 10:00–15:00 | 林雨柔 | [有向審查關係](https://linyurou8821.github.io/sna-j-gharchive/#review-interaction)與 [RQ2 三種指標](https://linyurou8821.github.io/sna-j-gharchive/#rq2) |
 | 15:00–20:00 | 粘筑晴 | [RQ3 移除實驗](https://linyurou8821.github.io/sna-j-gharchive/#rq3)與[方法與限制](https://linyurou8821.github.io/sna-j-gharchive/#method) |
 
-## 賴尚圻｜00:00–05:00｜研究動機、資料與網絡定義
+## 曹碩顯｜00:00–05:00｜研究動機、資料與網絡定義
 
 [從首頁標題開始。投影停在首頁，讓同學先看到題目。]
 
@@ -39,7 +39,7 @@
 
 畫面上方的 **93 個跨庫帳號**，是指保留的 1,379 個帳號裡，有 93 個至少參與了兩個庫。右側只畫最多 40 個示例帳號，方便大家看線條。同一個庫連到兩個帳號時，我們只知道兩個帳號都在該庫留下了活動。接下來請第二位組員示範切換事件層，看看橋接名單怎麼變。
 
-## 曹碩顯｜05:00–10:00｜RQ1 不同事件層的橋接者
+## 賴尚圻｜05:00–10:00｜RQ1 不同事件層的橋接者
 
 [留在「互動網絡」。依序點 Issue、PR、Review，每切一次先讓畫面停一下。]
 
